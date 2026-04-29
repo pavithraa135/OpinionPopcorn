@@ -33,9 +33,13 @@ reviewInput.value = "The movie was okay, some parts were good.";
 
 analyseBtn.onclick = async function () {
 
-```
 const review = reviewInput.value.trim();
-if (!review) return;
+if (!review) {
+  alert("Please enter a movie review first!");
+  return;
+}
+
+console.log("Sending review:", review);
 
 stateIdle.hidden = true;
 stateLoading.hidden = false;
@@ -50,7 +54,14 @@ try {
     body: JSON.stringify({ review: review })
   });
 
+  console.log("Response status:", response.status);
+  
+  if (!response.ok) {
+    throw new Error("Server error: " + response.status);
+  }
+
   const data = await response.json();
+  console.log("Response data:", data);
 
   verdictLabel.textContent = data.sentiment;
 
@@ -70,10 +81,10 @@ try {
 
 } catch (e) {
   console.log(e);
+  alert("Error: " + e.message + "\n\nCheck console for details.");
   stateLoading.hidden = true;
   stateIdle.hidden = false;
 }
-```
 
 };
 
