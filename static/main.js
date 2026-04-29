@@ -1,118 +1,88 @@
 "use strict";
 
-/* WAIT UNTIL FULL PAGE LOAD */
 window.onload = function () {
 
 const reviewInput = document.getElementById("review-input");
-const charCount = document.getElementById("char-count");
 const analyseBtn = document.getElementById("analyse-btn");
 const resetBtn = document.getElementById("reset-btn");
+
+const verdictLabel = document.getElementById("verdict-label");
+const verdictEmoji = document.getElementById("verdict-emoji");
+const gaugePct = document.getElementById("gauge-pct");
+const gaugeFill = document.getElementById("gauge-fill");
+
+const stateIdle = document.getElementById("state-idle");
+const stateLoading = document.getElementById("state-loading");
+const stateResult = document.getElementById("state-result");
 
 const samplePos = document.getElementById("sample-pos");
 const sampleNeg = document.getElementById("sample-neg");
 const sampleMid = document.getElementById("sample-mid");
 
-/* 🔥 SAMPLE BUTTON FIX (GUARANTEED) */
-[samplePos, sampleNeg, sampleMid].forEach(btn => {
-if (!btn) return;
-
-```
-btn.onclick = function () {
-  const text = this.getAttribute("data-review");
-  reviewInput.value = text;
-  charCount.textContent = text.length;
-  reviewInput.focus();
+if (samplePos) samplePos.onclick = () => {
+reviewInput.value = "The movie was amazing and fantastic, I loved it.";
 };
-```
 
-});
+if (sampleNeg) sampleNeg.onclick = () => {
+reviewInput.value = "The movie was terrible and boring.";
+};
 
-/* CHAR COUNT */
-reviewInput.addEventListener("input", () => {
-charCount.textContent = reviewInput.value.length;
-});
+if (sampleMid) sampleMid.onclick = () => {
+reviewInput.value = "The movie was okay, some parts were good.";
+};
 
-/* STATES */
-const stateIdle = document.getElementById("state-idle");
-const stateLoading = document.getElementById("state-loading");
-const stateResult = document.getElementById("state-result");
-
-function showState(state) {
-stateIdle.hidden = state !== "idle";
-stateLoading.hidden = state !== "loading";
-stateResult.hidden = state !== "result";
-}
-
-/* RESULT ELEMENTS */
-const verdictSplash = document.getElementById("verdict-splash");
-const verdictEmoji = document.getElementById("verdict-emoji");
-const verdictLabel = document.getElementById("verdict-label");
-const gaugePct = document.getElementById("gauge-pct");
-const gaugeFill = document.getElementById("gauge-fill");
-const gaugeGlow = document.getElementById("gauge-glow");
-
-function renderResult(data) {
-const isPositive = data.sentiment === "Positive";
+analyseBtn.onclick = async function () {
 
 ```
-verdictSplash.classList.remove("pos", "neg");
-verdictSplash.classList.add(isPositive ? "pos" : "neg");
-
-verdictEmoji.textContent = isPositive ? "🎉" : "👎";
-verdictLabel.textContent = data.sentiment;
-
-let raw = data.confidence / 100;
-let boosted = raw * 0.5 + 0.5;
-let pct = (boosted * 100).toFixed(1);
-
-gaugePct.textContent = pct + "%";
-
-const fillColor = isPositive
-  ? "linear-gradient(90deg, #d97706, #f5a623, #fbbf24)"
-  : "linear-gradient(90deg, #be123c, #e05c69, #fb7185)";
-
-gaugeFill.style.width = pct + "%";
-gaugeFill.style.background = fillColor;
-gaugeGlow.style.width = pct + "%";
-
-showState("result");
-```
-
-}
-
-/* ANALYSE */
-async function analyse() {
 const review = reviewInput.value.trim();
-if (!review || review.length < 5) return;
+if (!review) return;
 
-```
-analyseBtn.disabled = true;
-showState("loading");
+stateIdle.hidden = true;
+stateLoading.hidden = false;
+stateResult.hidden = true;
 
 try {
-  const resp = await fetch("/predict", {
+  const response = await fetch("/predict", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({review: review }),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ review: review })
   });
 
-  const data = await resp.json();
-  setTimeout(() => renderResult(data), 300);
+  const data = await response.json();
 
-} catch {
-  showState("idle");
-} finally {
-  analyseBtn.disabled = false;
+  verdictLabel.textContent = data.sentiment;
+
+  if (data.sentiment === "Positive") {
+    verdictEmoji.textContent = "😊";
+  } else if (data.sentiment === "Neutral") {
+    verdictEmoji.textContent = "😐";
+  } else {
+    verdictEmoji.textContent = "👎";
+  }
+
+  gaugePct.textContent = data.confidence + "%";
+  gaugeFill.style.width = data.confidence + "%";
+
+  stateLoading.hidden = true;
+  stateResult.hidden = false;
+
+} catch (e) {
+  console.log(e);
+  stateLoading.hidden = true;
+  stateIdle.hidden = false;
 }
 ```
 
-}
+};
 
-analyseBtn.onclick = analyse;
-
+if (resetBtn) {
 resetBtn.onclick = () => {
 reviewInput.value = "";
-charCount.textContent = "0";
-showState("idle");
+stateIdle.hidden = false;
+stateLoading.hidden = true;
+stateResult.hidden = true;
 };
+}
 };
