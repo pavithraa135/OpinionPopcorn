@@ -147,6 +147,10 @@ try {
         <div class="detail-val mono"><span>${data.word_count}</span> • <span>${data.reading_time}</span></div>
       </div>
       <div class="detail-card">
+        <div class="detail-label">Subjectivity</div>
+        <div class="detail-val mono">${data.subjectivity}% <span style="font-size:0.7rem; color:var(--t-3);">${data.subjectivity < 50 ? '(Factual)' : '(Opinionated)'}</span></div>
+      </div>
+      <div class="detail-card" style="grid-column: span 2;">
         <div class="detail-label">Themes Detected</div>
         <div class="detail-val">${data.themes || "General"}</div>
       </div>
@@ -218,6 +222,9 @@ if (searchBtn) searchBtn.onclick = async function () {
             <div style="font-size: 0.85rem; color: var(--t-2); line-height: 1.5; margin-top: 6px;">${data.movie.summary}</div>
           </div>
         </div>
+        <div class="detail-card" style="grid-column: span 2; display: flex; align-items: center; justify-content: center; height: 180px;">
+          <canvas id="sentimentChart"></canvas>
+        </div>
         <div class="detail-card" style="grid-column: span 2;">
           <div class="detail-label" style="margin-bottom: 12px;">Aggregated Reviews</div>
           <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -225,6 +232,27 @@ if (searchBtn) searchBtn.onclick = async function () {
           </div>
         </div>
       `;
+      
+      const ctx = document.getElementById('sentimentChart').getContext('2d');
+      new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+              labels: ['Positive', 'Neutral', 'Negative'],
+              datasets: [{
+                  data: [data.stats.positive, data.stats.neutral, data.stats.negative],
+                  backgroundColor: ['#f5a623', '#2dd4bf', '#e05c69'],
+                  borderWidth: 0,
+                  hoverOffset: 4
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: { position: 'right', labels: { color: '#eeeeff', font: { family: 'Inter' } } }
+              }
+          }
+      });
     }
 
     stateLoading.hidden = true;

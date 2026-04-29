@@ -113,6 +113,7 @@ def detailed_analysis(text):
     # --- AI/ML Sentiment Engine (TextBlob) ---
     blob = TextBlob(text)
     polarity = blob.sentiment.polarity  # Range: -1.0 to 1.0
+    subjectivity = blob.sentiment.subjectivity  # Range: 0.0 to 1.0
     
     if polarity >= 0.1:
         sentiment = "Positive"
@@ -159,6 +160,7 @@ def detailed_analysis(text):
         "text": text,
         "sentiment": sentiment,
         "confidence": int(prob * 100),
+        "subjectivity": int(subjectivity * 100),
         "word_count": word_count,
         "reading_time": reading_time_str,
         "themes": ", ".join(themes),
@@ -190,10 +192,14 @@ def search_movie():
     if not analyzed_reviews:
         avg_conf = 0
         overall = "Neutral"
+        pos_count = 0
+        neg_count = 0
+        neu_count = 0
     else:
         avg_conf = sum(s["confidence"] for s in analyzed_reviews) // len(analyzed_reviews)
         pos_count = sum(1 for s in analyzed_reviews if s["sentiment"] == "Positive")
         neg_count = sum(1 for s in analyzed_reviews if s["sentiment"] == "Negative")
+        neu_count = len(analyzed_reviews) - pos_count - neg_count
         
         if pos_count > neg_count:
             overall = "Positive"
@@ -206,7 +212,12 @@ def search_movie():
         "movie": movie_info,
         "sentiment": overall,
         "confidence": avg_conf,
-        "reviews": analyzed_reviews
+        "reviews": analyzed_reviews,
+        "stats": {
+            "positive": pos_count,
+            "negative": neg_count,
+            "neutral": neu_count
+        }
     })
 
 if __name__ == "__main__":
