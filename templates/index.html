@@ -21,21 +21,41 @@
 
   <div class="noise" aria-hidden="true"></div>
   <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+  <nav class="navbar" style="position: fixed; top: 0; left: 0; right: 0; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(4,5,13,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid var(--border-dim); transition: all 0.3s ease;">
+    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; color: white; display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 1.5rem;">🍿</span> Opinion<span class="logo-accent">Popcorn</span>
+    </div>
+    <div style="display: flex; gap: 30px; align-items: center;">
+      <a href="#features" style="color: var(--t-1); text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: color 0.3s ease;" onmouseover="this.style.color='var(--violet-lt)'" onmouseout="this.style.color='var(--t-1)'">How It Works</a>
+      <a href="#app" style="color: var(--t-1); text-decoration: none; font-size: 0.95rem; font-weight: 600; background: rgba(124,106,247,0.2); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(124,106,247,0.4); transition: all 0.3s ease;" onmouseover="this.style.background='rgba(124,106,247,0.4)'" onmouseout="this.style.background='rgba(124,106,247,0.2)'">Launch App</a>
+    </div>
+  </nav>
 
-  <div class="page-wrap">
+  <div class="page-wrap" style="padding-top: 80px;">
 
-```
-<header class="hero">
-
-  <div class="logo-wrap">
+<header class="hero" style="min-height: 70vh; display: flex; flex-direction: column; justify-content: center; position: relative;">
+  <div class="logo-wrap" style="margin-bottom: 20px;">
     <span class="logo-popcorn" id="popcorn-logo">🍿</span>
     <div>
       <h1 class="logo-title">Opinion<span class="logo-accent">Popcorn</span></h1>
       <p class="logo-tagline">Analyze movie reviews instantly</p>
     </div>
   </div>
+  
+  <p style="font-size: 1.15rem; max-width: 600px; margin: 0 auto 40px; color: var(--t-2); line-height: 1.6;">
+    OpinionPopcorn uses advanced AI to instantly read, understand, and summarize the sentiment of movie reviews. Know what people really think before you grab your popcorn.
+  </p>
+  
+  <div style="margin-bottom: 60px;">
+    <a href="#app" class="btn-analyse" style="display: inline-flex; align-items: center; justify-content: center; padding: 0 40px; text-decoration: none; width: auto; height: 54px; border-radius: 14px;">
+      <span class="btn-bg"></span>
+      <span class="btn-content">
+        <span class="btn-text">Try It Now</span>
+      </span>
+    </a>
+  </div>
 
-  <div class="filmstrip" aria-hidden="true">
+  <div class="filmstrip" aria-hidden="true" style="position: absolute; bottom: 0; left: 0; right: 0;">
     <div class="film-row">
       <span>★</span><span>REVIEW</span><span>★</span><span>ANALYSE</span>
       <span>★</span><span>REVIEW</span><span>★</span><span>ANALYSE</span>
@@ -45,52 +65,120 @@
   </div>
 </header>
 
+<section id="features" style="padding: 80px 0; margin-bottom: 40px;">
+  <h2 style="text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 3rem; margin-bottom: 40px; color: white; letter-spacing: 2px;">How It Works</h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+    <div class="panel" style="text-align: center; padding: 40px 20px;">
+      <div style="font-size: 3rem; margin-bottom: 20px;">🧠</div>
+      <h3 style="margin-bottom: 10px; color: white; font-size: 1.2rem;">AI Sentiment Engine</h3>
+      <p style="color: var(--t-3); font-size: 0.9rem; line-height: 1.5;">Instantly detect whether a review is positive, neutral, or negative with a precise confidence score.</p>
+    </div>
+    <div class="panel" style="text-align: center; padding: 40px 20px;">
+      <div style="font-size: 3rem; margin-bottom: 20px;">🎬</div>
+      <h3 style="margin-bottom: 10px; color: white; font-size: 1.2rem;">Thematic Extraction</h3>
+      <p style="color: var(--t-3); font-size: 0.9rem; line-height: 1.5;">Our AI reads between the lines to figure out what themes (Acting, Directing, Music) the reviewer is talking about.</p>
+    </div>
+    <div class="panel" style="text-align: center; padding: 40px 20px;">
+      <div style="font-size: 3rem; margin-bottom: 20px;">🔎</div>
+      <h3 style="margin-bottom: 10px; color: white; font-size: 1.2rem;">Movie Aggregation</h3>
+      <p style="color: var(--t-3); font-size: 0.9rem; line-height: 1.5;">Search for any popular movie, and OpinionPopcorn will pull its summary and aggregate the sentiment of its top reviews.</p>
+    </div>
+  </div>
+</section>
+
+<h2 style="text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 3rem; margin-bottom: 40px; color: white; letter-spacing: 2px;" id="app">Try Now</h2>
 <main class="main-layout">
 
   <section class="panel panel-left" id="input-panel">
-    <div class="panel-header">
-      <span class="panel-icon">✍️</span>
-      <div>
-        <h2 class="panel-title">Your Review</h2>
-        <p class="panel-desc">Enter any movie review</p>
-      </div>
+    <div class="panel-tabs" style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <button class="tab-btn active" id="tab-analyze" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-dim); background: rgba(124,106,247,0.2); color: white; cursor: pointer; font-weight: bold;">✍️ Analyze Review</button>
+      <button class="tab-btn" id="tab-search" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border-dim); background: transparent; color: var(--t-3); cursor: pointer; font-weight: bold;">🔎 Search Movie</button>
     </div>
 
-    <div class="textarea-container">
-      <textarea id="review-input" placeholder="Type your movie review here..." maxlength="2000" rows="7"
-        spellcheck="true"></textarea>
-      <div class="textarea-footer">
-        <div class="char-pill"><span id="char-count">0</span>/2000</div>
-        <div class="shortcut-hint">Ctrl+↵ to analyse</div>
+    <!-- Review Input Mode -->
+    <div id="mode-analyze">
+      <div class="panel-header" style="margin-bottom: 10px;">
+        <div>
+          <h2 class="panel-title">Your Review</h2>
+          <p class="panel-desc">Enter any movie review</p>
+        </div>
       </div>
+
+      <div class="textarea-container">
+        <textarea id="review-input" placeholder="Type your movie review here..." maxlength="2000" rows="7"
+          spellcheck="true"></textarea>
+        <div class="textarea-footer">
+          <div class="char-pill"><span id="char-count">0</span>/2000</div>
+          <div class="shortcut-hint">Ctrl+↵ to analyse</div>
+        </div>
+      </div>
+
+      <div class="samples-section">
+        <span class="samples-heading">Quick samples</span>
+        <div class="sample-chips">
+          <button class="chip chip-pos" id="sample-pos" type="button"
+            data-review="An absolute masterpiece. The performances were breathtaking and deeply moving.">
+            <span>😍</span> Glowing Review
+          </button>
+          <button class="chip chip-neg" id="sample-neg" type="button"
+            data-review="Absolutely dreadful. The plot made no sense and acting was terrible.">
+            <span>🤮</span> Terrible Review
+          </button>
+          <button class="chip chip-mid" id="sample-mid" type="button"
+            data-review="It was okay. Some parts were good but overall average.">
+            <span>😐</span> Mixed Review
+          </button>
+        </div>
+      </div>
+
+      <button id="analyse-btn" type="button" class="btn-analyse">
+        <span class="btn-bg"></span>
+        <span class="btn-content">
+          <span class="btn-icon-left">🧠</span>
+          <span class="btn-text">Analyse Sentiment</span>
+          <span class="btn-arrow">→</span>
+        </span>
+      </button>
     </div>
 
-    <div class="samples-section">
-      <span class="samples-heading">Quick samples</span>
-      <div class="sample-chips">
-        <button class="chip chip-pos" id="sample-pos" type="button"
-          data-review="An absolute masterpiece. The performances were breathtaking and deeply moving.">
-          <span>😍</span> Glowing Review
-        </button>
-        <button class="chip chip-neg" id="sample-neg" type="button"
-          data-review="Absolutely dreadful. The plot made no sense and acting was terrible.">
-          <span>🤮</span> Terrible Review
-        </button>
-        <button class="chip chip-mid" id="sample-mid" type="button"
-          data-review="It was okay. Some parts were good but overall average.">
-          <span>😐</span> Mixed Review
-        </button>
+    <!-- Movie Search Mode -->
+    <div id="mode-search" style="display: none;">
+      <div class="panel-header" style="margin-bottom: 10px;">
+        <div>
+          <h2 class="panel-title">Movie Search</h2>
+          <p class="panel-desc">Find a movie and summarize reviews</p>
+        </div>
       </div>
-    </div>
 
-    <button id="analyse-btn" type="button" class="btn-analyse">
-      <span class="btn-bg"></span>
-      <span class="btn-content">
-        <span class="btn-icon-left">🧠</span>
-        <span class="btn-text">Analyse Sentiment</span>
-        <span class="btn-arrow">→</span>
-      </span>
-    </button>
+      <div class="textarea-container" style="margin-bottom: 10px;">
+        <input type="text" id="movie-search-input" placeholder="e.g. Inception, The Dark Knight..." 
+          style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-dim); border-radius: 14px; color: var(--t-1); padding: 16px; outline: none; font-size: 1rem; font-family: 'Inter', sans-serif;">
+      </div>
+
+      <div class="samples-section" style="margin-bottom: 20px;">
+        <span class="samples-heading">Trending Movies</span>
+        <div class="sample-chips">
+          <button class="chip" id="movie-sample-1" type="button" data-movie="Titanic">
+            <span>🚢</span> Titanic
+          </button>
+          <button class="chip" id="movie-sample-2" type="button" data-movie="Lion King">
+            <span>🦁</span> Lion King
+          </button>
+          <button class="chip" id="movie-sample-3" type="button" data-movie="2012">
+            <span>🌋</span> 2012
+          </button>
+        </div>
+      </div>
+
+      <button id="search-btn" type="button" class="btn-analyse">
+        <span class="btn-bg" style="background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);"></span>
+        <span class="btn-content">
+          <span class="btn-icon-left">🔎</span>
+          <span class="btn-text">Find & Summarize</span>
+          <span class="btn-arrow">→</span>
+        </span>
+      </button>
+    </div>
   </section>
 
   <section class="panel panel-right" id="result-panel">
@@ -144,6 +232,10 @@
         </div>
       </div>
 
+      <div id="result-details" class="details-grid">
+        <!-- populated by js -->
+      </div>
+
       <button class="btn-reset" id="reset-btn" type="button">
         ← Try another review
       </button>
@@ -153,9 +245,7 @@
 </main>
 
 <footer class="footer">
-  <p>Movie Review Sentiment Analysis System</p>
 </footer>
-```
 
   </div>
 
