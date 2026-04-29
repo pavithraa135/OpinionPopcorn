@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpinionPopcorn — AI Movie Sentiment</title>
+  <meta name="description" content="AI-powered movie review sentiment analysis." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+  <div class="noise" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+
+  <div class="page-wrap">
+
+```
+<header class="hero">
+
+  <div class="logo-wrap">
+    <span class="logo-popcorn" id="popcorn-logo">🍿</span>
+    <div>
+      <h1 class="logo-title">Opinion<span class="logo-accent">Popcorn</span></h1>
+      <p class="logo-tagline">Analyze movie reviews instantly</p>
+    </div>
+  </div>
+
+  <div class="filmstrip" aria-hidden="true">
+    <div class="film-row">
+      <span>★</span><span>REVIEW</span><span>★</span><span>ANALYSE</span>
+      <span>★</span><span>REVIEW</span><span>★</span><span>ANALYSE</span>
+      <span>★</span><span>REVIEW</span><span>★</span><span>ANALYSE</span>
+      <span>★</span><span>REVIEW</span><span>★</span><span>ANALYSE</span>
+    </div>
+  </div>
+</header>
+
+<main class="main-layout">
+
+  <section class="panel panel-left" id="input-panel">
+    <div class="panel-header">
+      <span class="panel-icon">✍️</span>
+      <div>
+        <h2 class="panel-title">Your Review</h2>
+        <p class="panel-desc">Enter any movie review</p>
+      </div>
+    </div>
+
+    <div class="textarea-container">
+      <textarea id="review-input" placeholder="Type your movie review here..." maxlength="2000" rows="7"
+        spellcheck="true"></textarea>
+      <div class="textarea-footer">
+        <div class="char-pill"><span id="char-count">0</span>/2000</div>
+        <div class="shortcut-hint">Ctrl+↵ to analyse</div>
+      </div>
+    </div>
+
+    <div class="samples-section">
+      <span class="samples-heading">Quick samples</span>
+      <div class="sample-chips">
+        <button class="chip chip-pos" id="sample-pos" type="button"
+          data-review="An absolute masterpiece. The performances were breathtaking and deeply moving.">
+          <span>😍</span> Glowing Review
+        </button>
+        <button class="chip chip-neg" id="sample-neg" type="button"
+          data-review="Absolutely dreadful. The plot made no sense and acting was terrible.">
+          <span>🤮</span> Terrible Review
+        </button>
+        <button class="chip chip-mid" id="sample-mid" type="button"
+          data-review="It was okay. Some parts were good but overall average.">
+          <span>😐</span> Mixed Review
+        </button>
+      </div>
+    </div>
+
+    <button id="analyse-btn" type="button" class="btn-analyse">
+      <span class="btn-bg"></span>
+      <span class="btn-content">
+        <span class="btn-icon-left">🧠</span>
+        <span class="btn-text">Analyse Sentiment</span>
+        <span class="btn-arrow">→</span>
+      </span>
+    </button>
+  </section>
+
+  <section class="panel panel-right" id="result-panel">
+
+    <div class="state-idle" id="state-idle">
+      <div class="idle-graphic">
+        <div class="idle-ring ring-1"></div>
+        <div class="idle-ring ring-2"></div>
+        <div class="idle-ring ring-3"></div>
+        <span class="idle-emoji">🎭</span>
+      </div>
+      <p class="idle-title">Awaiting your review</p>
+      <p class="idle-sub">Enter your review and click Analyse</p>
+    </div>
+
+    <div class="state-loading" id="state-loading" hidden>
+      <div class="loader-ring">
+        <svg viewBox="0 0 80 80" class="loader-svg">
+          <circle cx="40" cy="40" r="34" class="loader-track" />
+          <circle cx="40" cy="40" r="34" class="loader-fill" />
+        </svg>
+        <span class="loader-brain">🧠</span>
+      </div>
+      <p class="loading-title">Thinking…</p>
+    </div>
+
+    <div class="state-result" id="state-result" hidden>
+
+      <div class="verdict-splash" id="verdict-splash">
+        <div class="verdict-emoji-wrap">
+          <span class="verdict-emoji" id="verdict-emoji">😊</span>
+        </div>
+        <div class="verdict-text-wrap">
+          <div class="verdict-tag" id="verdict-tag">SENTIMENT</div>
+          <div class="verdict-label" id="verdict-label">Positive</div>
+        </div>
+      </div>
+
+      <div class="gauge-card">
+        <div class="gauge-header">
+          <span class="gauge-title">Confidence Score</span>
+          <span class="gauge-pct" id="gauge-pct">0%</span>
+        </div>
+        <div class="gauge-track" id="gauge-track">
+          <div class="gauge-fill" id="gauge-fill"></div>
+          <div class="gauge-glow" id="gauge-glow"></div>
+        </div>
+        <div class="gauge-labels">
+          <span>Negative</span>
+          <span>Positive</span>
+        </div>
+      </div>
+
+      <button class="btn-reset" id="reset-btn" type="button">
+        ← Try another review
+      </button>
+    </div>
+
+  </section>
+</main>
+
+<footer class="footer">
+  <p>Movie Review Sentiment Analysis System</p>
+</footer>
+```
+
+  </div>
+
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+
+</body>
+
+</html>
