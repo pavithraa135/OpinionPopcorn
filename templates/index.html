@@ -180,6 +180,14 @@
         </span>
       </button>
     </div>
+
+    <!-- History Section -->
+    <div style="margin-top: 30px; border-top: 1px solid var(--border-dim); padding-top: 20px;">
+      <h3 style="font-size: 0.75rem; color: var(--t-3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700;">Recent Activity</h3>
+      <div id="history-container" style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="color: var(--t-4); font-size: 0.8rem; font-style: italic;">No recent activity yet.</span>
+      </div>
+    </div>
   </section>
 
   <section class="panel panel-right" id="result-panel">
@@ -237,15 +245,96 @@
         <!-- populated by js -->
       </div>
 
-      <button class="btn-reset" id="reset-btn" type="button">
-        ← Try another review
-      </button>
+      <div style="display: flex; gap: 10px; width: 100%; margin-top: 10px;">
+        <button class="btn-reset" id="reset-btn" type="button" style="flex: 1;">
+          ← Try another
+        </button>
+        <button class="btn-reset" id="listen-btn" type="button" style="flex: 1; border-color: rgba(245,166,35,0.5); color: var(--gold); background: rgba(245,166,35,0.1);" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">
+          🔊 Listen
+        </button>
+        <button class="btn-reset" id="download-btn" type="button" style="flex: 1; border-color: rgba(124,106,247,0.5); color: var(--violet-lt); background: rgba(124,106,247,0.1);" onmouseover="this.style.background='rgba(124,106,247,0.2)'" onmouseout="this.style.background='rgba(124,106,247,0.1)'">
+          📥 Download
+        </button>
+      </div>
     </div>
 
   </section>
 </main>
 
-<footer class="footer">
+<section class="trending-section" id="trending" style="padding: 60px 0; margin-top: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+    <div>
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: white; letter-spacing: 1.5px; margin-bottom: 8px;">🔥 Live Community Trends</h2>
+      <p style="color: var(--t-3); font-size: 0.9rem;">The most debated movies on OpinionPopcorn right now.</p>
+    </div>
+    <a href="#app" style="color: var(--violet-lt); font-size: 0.9rem; text-decoration: none; font-weight: 600; transition: color 0.3s ease;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--violet-lt)'">Analyze another →</a>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+    <!-- Trend Card 1 -->
+    <div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 15px; cursor: pointer; transition: all 0.3s ease; border-color: rgba(245,166,35,0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='rgba(245,166,35,0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(245,166,35,0.2)'">
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="font-size: 2.5rem; background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🚀</div>
+        <div>
+          <h3 style="color: white; font-size: 1.15rem; margin-bottom: 6px;">Interstellar</h3>
+          <span style="font-size: 0.75rem; color: var(--gold); font-weight: bold; padding: 4px 10px; background: rgba(245,166,35,0.1); border-radius: 6px; letter-spacing: 0.5px;">88% Positive</span>
+        </div>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--t-2); line-height: 1.6; font-style: italic;">"Breathtaking visuals and a deeply moving story about love."</p>
+    </div>
+    
+    <!-- Trend Card 2 -->
+    <div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 15px; cursor: pointer; transition: all 0.3s ease; border-color: rgba(245,166,35,0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='rgba(245,166,35,0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(245,166,35,0.2)'">
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="font-size: 2.5rem; background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🦇</div>
+        <div>
+          <h3 style="color: white; font-size: 1.15rem; margin-bottom: 6px;">The Dark Knight</h3>
+          <span style="font-size: 0.75rem; color: var(--gold); font-weight: bold; padding: 4px 10px; background: rgba(245,166,35,0.1); border-radius: 6px; letter-spacing: 0.5px;">95% Positive</span>
+        </div>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--t-2); line-height: 1.6; font-style: italic;">"The greatest comic book movie ever made. Heath Ledger is perfect."</p>
+    </div>
+
+    <!-- Trend Card 3 -->
+    <div class="panel" style="padding: 24px; display: flex; flex-direction: column; gap: 15px; cursor: pointer; transition: all 0.3s ease; border-color: rgba(224,92,105,0.2);" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='rgba(224,92,105,0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(224,92,105,0.2)'">
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="font-size: 2.5rem; background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🌋</div>
+        <div>
+          <h3 style="color: white; font-size: 1.15rem; margin-bottom: 6px;">2012</h3>
+          <span style="font-size: 0.75rem; color: var(--rose); font-weight: bold; padding: 4px 10px; background: rgba(224,92,105,0.1); border-radius: 6px; letter-spacing: 0.5px;">42% Mixed</span>
+        </div>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--t-2); line-height: 1.6; font-style: italic;">"The plot is pretty stupid and lame, but the CGI is amazing."</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" style="border-top: 1px solid var(--border-dim); padding: 60px 0 20px; margin-top: 20px;">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; margin-bottom: 40px;">
+    <div style="max-width: 300px;">
+      <div style="font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; color: white; margin-bottom: 15px;">🍿 Opinion<span class="logo-accent">Popcorn</span></div>
+      <p style="color: var(--t-3); font-size: 0.85rem; line-height: 1.6;">The world's smartest AI-powered movie review sentiment engine. Never watch a bad movie again.</p>
+    </div>
+    <div>
+      <h4 style="color: white; margin-bottom: 15px; font-size: 0.95rem;">Product</h4>
+      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+        <li><a href="#features" style="color: var(--t-3); text-decoration: none; font-size: 0.85rem; transition: color 0.3s ease;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--t-3)'">Features</a></li>
+        <li><a href="#app" style="color: var(--t-3); text-decoration: none; font-size: 0.85rem; transition: color 0.3s ease;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--t-3)'">Live App</a></li>
+        <li><a href="#trending" style="color: var(--t-3); text-decoration: none; font-size: 0.85rem; transition: color 0.3s ease;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--t-3)'">Community Trends</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color: white; margin-bottom: 15px; font-size: 0.95rem;">Stay Updated</h4>
+      <p style="color: var(--t-3); font-size: 0.85rem; margin-bottom: 10px;">Get the latest AI updates and movie trends.</p>
+      <div style="display: flex; gap: 8px;">
+        <input type="email" placeholder="Enter your email" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-dim); border-radius: 8px; color: white; padding: 10px 14px; font-size: 0.85rem; outline: none; width: 220px; transition: border-color 0.3s ease;" onfocus="this.style.borderColor='var(--violet-lt)'" onblur="this.style.borderColor='var(--border-dim)'">
+        <button style="background: var(--violet); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: background 0.3s ease;" onmouseover="this.style.background='var(--violet-lt)'" onmouseout="this.style.background='var(--violet)'">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  <div style="text-align: center; color: var(--t-4); font-size: 0.75rem; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);">
+    &copy; 2026 OpinionPopcorn Inc. All rights reserved.
+  </div>
 </footer>
 
   </div>

@@ -56,12 +56,45 @@ if (tabSearch) tabSearch.onclick = () => {
 };
 
 const charCountEl = document.getElementById("char-count");
+let lastReportText = ""; 
+let lastReviewTextForTTS = ""; // Global to hold text for audio playback
 
 function updateCharCount() {
   if (charCountEl) {
     charCountEl.textContent = reviewInput.value.length;
   }
 }
+
+function saveToHistory(text, type, score) {
+    let history = JSON.parse(localStorage.getItem("op_history") || "[]");
+    history.unshift({ text: text, type: type, score: score });
+    if (history.length > 4) history.pop();
+    localStorage.setItem("op_history", JSON.stringify(history));
+    renderHistory();
+}
+
+function renderHistory() {
+    const container = document.getElementById("history-container");
+    if (!container) return;
+    
+    let history = JSON.parse(localStorage.getItem("op_history") || "[]");
+    if (history.length === 0) {
+        container.innerHTML = '<span style="color: var(--t-4); font-size: 0.8rem; font-style: italic;">No recent activity yet.</span>';
+        return;
+    }
+    
+    container.innerHTML = history.map(h => `
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-dim); border-radius: 8px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; cursor: default; transition: background 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+            <div style="display: flex; flex-direction: column; gap: 4px; overflow: hidden;">
+                <span style="color: white; font-size: 0.8rem; font-weight: bold;">${h.type === 'search' ? '🔎 Movie Search' : '✍️ Review'}</span>
+                <span style="color: var(--t-3); font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${h.text}</span>
+            </div>
+            <span style="font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; font-weight: bold; background: rgba(124,106,247,0.2); color: var(--violet-lt);">${h.score}</span>
+        </div>
+    `).join('');
+}
+
+renderHistory();
 
 if (reviewInput) {
   reviewInput.addEventListener("input", updateCharCount);
@@ -141,7 +174,15 @@ try {
   gaugeFill.style.width = data.confidence + "%";
 
   if (resultDetailsEl) {
+    const keywordsHtml = data.key_words && data.key_words !== "None detected" 
+      ? data.key_words.split(',').map(kw => `<span style="background: rgba(124,106,247,0.15); border: 1px solid rgba(124,106,247,0.3); color: var(--violet-lt); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; margin-right: 6px; display: inline-block; margin-bottom: 6px; font-weight: 500;">${kw.trim()}</span>`).join('') 
+      : "<span style='color: var(--t-4); font-style: italic;'>None detected</span>";
+
     resultDetailsEl.innerHTML = `
+      <div class="detail-card">
+        <div class="detail-label">Vibe Summary</div>
+        <div class="detail-val" style="font-size: 1.5rem; letter-spacing: 5px;">${data.emojis}</div>
+      </div>
       <div class="detail-card">
         <div class="detail-label">Words / Read Time</div>
         <div class="detail-val mono"><span>${data.word_count}</span> • <span>${data.reading_time}</span></div>
@@ -150,17 +191,31 @@ try {
         <div class="detail-label">Subjectivity</div>
         <div class="detail-val mono">${data.subjectivity}% <span style="font-size:0.7rem; color:var(--t-3);">${data.subjectivity < 50 ? '(Factual)' : '(Opinionated)'}</span></div>
       </div>
-      <div class="detail-card" style="grid-column: span 2;">
+      <div class="detail-card">
         <div class="detail-label">Themes Detected</div>
         <div class="detail-val">${data.themes || "General"}</div>
       </div>
       <div class="detail-card" style="grid-column: span 2;">
-        <div class="detail-label">Key Terms Highlighted</div>
-        <div class="detail-val">${data.key_words || "None"}</div>
+        <div class="detail-label" style="margin-bottom: 8px;">Key Terms Highlighted</div>
+        <div class="detail-val" style="display: flex; flex-wrap: wrap;">${keywordsHtml}</div>
       </div>
     `;
   }
 
+  lastReviewTextForTTS = data.text;
+
+  // Create downloadable report
+  lastReportText = `OPINION POPCORN - REVIEW ANALYSIS REPORT\n` +
+                   `----------------------------------------\n` +
+                   `Review: "${data.text}"\n\n` +
+                   `Overall Sentiment : ${data.sentiment}\n` +
+                   `Confidence Score  : ${data.confidence}%\n` +
+                   `Subjectivity      : ${data.subjectivity}% ${data.subjectivity < 50 ? '(Factual)' : '(Opinionated)'}\n` +
+                   `Reading Time      : ${data.reading_time} (${data.word_count} words)\n` +
+                   `Themes Detected   : ${data.themes || "General"}\n` +
+                   `Key Terms         : ${data.key_words || "None"}\n`;
+
+  saveToHistory(review, 'analysis', data.sentiment);
   stateLoading.hidden = true;
   stateResult.hidden = false;
 
@@ -255,6 +310,19 @@ if (searchBtn) searchBtn.onclick = async function () {
       });
     }
 
+    lastReportText = `OPINION POPCORN - MOVIE SEARCH REPORT\n` +
+                     `----------------------------------------\n` +
+                     `Movie   : ${data.movie.title}\n` +
+                     `Summary : ${data.movie.summary}\n\n` +
+                     `Aggregated Sentiment : ${data.sentiment}\n` +
+                     `Confidence Avg       : ${data.confidence}%\n` +
+                     `Total Reviews        : ${data.reviews.length}\n` +
+                     `Breakdown            : Positive: ${data.stats.positive} | Neutral: ${data.stats.neutral} | Negative: ${data.stats.negative}\n\n` +
+                     `TOP REVIEWS:\n` +
+                     data.reviews.map((r, i) => `[${i+1}] ${r.sentiment} (${r.confidence}%) - "${r.text}"`).join("\n");
+
+    lastReviewTextForTTS = data.movie.summary;
+    saveToHistory(query, 'search', data.sentiment);
     stateLoading.hidden = true;
     stateResult.hidden = false;
 
@@ -265,6 +333,34 @@ if (searchBtn) searchBtn.onclick = async function () {
     stateIdle.hidden = false;
   }
 };
+
+const downloadBtn = document.getElementById("download-btn");
+if (downloadBtn) {
+  downloadBtn.onclick = () => {
+    if (!lastReportText) return;
+    const blob = new Blob([lastReportText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "OpinionPopcorn_Report.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+}
+
+const listenBtn = document.getElementById("listen-btn");
+if (listenBtn) {
+  listenBtn.onclick = () => {
+    if (!lastReviewTextForTTS) return;
+    window.speechSynthesis.cancel(); // Stop any currently playing audio
+    const utterance = new SpeechSynthesisUtterance(lastReviewTextForTTS);
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  };
+}
 
 if (resetBtn) {
   resetBtn.onclick = () => {

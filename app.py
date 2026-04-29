@@ -107,6 +107,27 @@ def search_movie_mock(query):
         "reviews": random.choice(fallback_reviews)
     }
 
+def generate_emojis(text):
+    text_lower = text.lower()
+    emojis = []
+    
+    if re.search(r'\b(funny|hilarious|laugh|comedy)\b', text_lower): emojis.append("😂")
+    if re.search(r'\b(sad|cry|emotional|heartbreaking)\b', text_lower): emojis.append("😢")
+    if re.search(r'\b(scary|horror|terrifying|jump)\b', text_lower): emojis.append("😱")
+    if re.search(r'\b(action|explosions|thrilling|fast)\b', text_lower): emojis.append("🔥")
+    if re.search(r'\b(love|romance|sweet|beautiful)\b', text_lower): emojis.append("❤️")
+    if re.search(r'\b(space|aliens|sci-fi|universe)\b', text_lower): emojis.append("👽")
+    if re.search(r'\b(boring|sleep|dull|slow)\b', text_lower): emojis.append("😴")
+    if re.search(r'\b(masterpiece|perfect|best|amazing)\b', text_lower): emojis.append("👑")
+    if re.search(r'\b(bad|terrible|worst|trash)\b', text_lower): emojis.append("🗑️")
+    if re.search(r'\b(music|score|soundtrack|song)\b', text_lower): emojis.append("🎵")
+    if re.search(r'\b(magic|fantasy|wizard|spell)\b', text_lower): emojis.append("✨")
+    
+    if not emojis:
+        emojis = ["🍿", "🎬", "👀"]
+        
+    return "".join(emojis[:3])
+
 def detailed_analysis(text):
     text_lower = text.lower()
     
@@ -156,6 +177,8 @@ def detailed_analysis(text):
     found_neg = [w for w in negative_words if re.search(r'\b' + w + r'\b', text_lower)]
     key_words = found_pos + found_neg
     
+    emojis = generate_emojis(text)
+    
     return {
         "text": text,
         "sentiment": sentiment,
@@ -164,7 +187,8 @@ def detailed_analysis(text):
         "word_count": word_count,
         "reading_time": reading_time_str,
         "themes": ", ".join(themes),
-        "key_words": ", ".join(key_words) if key_words else "None detected"
+        "key_words": ", ".join(key_words) if key_words else "None detected",
+        "emojis": emojis
     }
 
 @app.route("/")
